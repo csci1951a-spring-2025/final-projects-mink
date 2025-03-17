@@ -4,7 +4,7 @@
 
 Dataset: [https://www.ers.usda.gov/data-products/food-access-research-atlas/download-the-data](https://www.ers.usda.gov/data-products/food-access-research-atlas/download-the-data)  
 
-For our main data analysis, we plan to filter the data into **3** categories: **Urban** **counties** that fit the food desert criteria, **Rural** **counties** that fit the food desert criteria, and all other counties (which we will call **non-food-deserts counties**). Then, we will cross reference these groups with their average standardized testing scores \+ crime rates using our other 2 datasets.
+For our main data analysis, we plan to filter the data into **3** categories: **Urban** **counties** that fit the food desert criteria, **Rural** **counties** that fit the food desert criteria, and all other counties (which we will call **non-food-deserts counties**). Then, we will cross reference these groups with their average standardized testing scores \+ health rates using our other 2 datasets.
 
 ## Data Attributes
 
