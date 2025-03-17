@@ -174,7 +174,67 @@ Other Attributes:
   * Do you need to throw any data away? What data? Why? Any reason this might affect the analyses you are able to run or the conclusions you are able to draw?  
     * NULL values for the attributes described above  
 * Summarize any challenges or observations you have made since collecting your data. Then, discuss your next steps and how your data collection has impacted the type of analysis you will perform. (approximately 3-5 sentences)  
-  * When joining with the CDC data across our primary key (census tract codes), we noticed that we lost about 3k entries. This could be due to some missing values in the CDC data.
+  * The observations we have made so far are that there are various datasets revolving around health that utilize the census tract as a primary key. This is beneficial because the data is public and published by reliable sources such as the CDC. This abundance of data allows us to analyze how food deserts affect the health of students and then examine their performance in schools. Still a challenge remains ensuring we take into account the missing data found in the educational opportunity dataset. Lastly we need to handle potential lost rows during joins to ensure we are not skewing are data
+
+# [CDC PLACES: Census Tract Data Health](https://www.cdc.gov/places/index.html)
+Dataset: [https://data.cdc.gov/500-Cities-Places/PLACES-Census-Tract-Data-GIS-Friendly-Format-2021-/mb5y-ytti/about_data](https://data.cdc.gov/500-Cities-Places/PLACES-Census-Tract-Data-GIS-Friendly-Format-2021-/mb5y-ytti/about_data)
+The PLACES project provides local data on the health status of locations across the United States. Specifically the 2021 release publishes data on the state of 2019. In addition the data is formatted with County Name and Census Tract. These columns provide flexibility and allow for a seamless join between the Food Desert, Educational Opportunity, and CDC Health data. The dataset presents multiple health status to monitor, but for our case we are prioritizing sleep deprivation and mental health status.
+## Data Attributes
+
+- **StateAbbr** :: State abbreviation(matching the Food Atlas and Educational Opportunity dataset)
+  - Type of data: Text  
+  - Default value: None, all defined  
+  - Range of values: (AK \- WY, 51 unique values including DC)  
+  - Simplified analysis of the distribution: Dataset covers almost all counties in the U.S and therefore state name appears alongside its census tract
+  - Are these values unique: No  
+  - Will you use this value to detect duplicates: No
+  - Is this a required value: Yes  
+  - Do you plan to use this attribute/feature in the analysis: Maybe if we expand the project to compare performance across states,
+  - Does this feature include potentially sensitive information: No  
+
+- **CountyName** :: County name (matching the Food Atlas and Educational Opportunity dataset)
+  - Type of data: Text  
+  - Default value: None, all defined  
+  - Range of values: Abbeville County - Ziebach County (1839 counties)
+  - Simplified analysis of the distribution: We have one County name per census tract
+  - Are these values unique: No  
+  - Will you use this value to detect duplicates: No
+  - Is this a required value: Yes  
+  - Do you plan to use this attribute/feature in the analysis: Yes, we have to use CountyName to map Health status to map the County name to Education opportunity since they provide us county level data.
+  - Does this feature include potentially sensitive information: No
+
+- **TractFIPS** :: Census Tract FIPS code name (matching the Food Atlas dataset)
+  - Type of data: Text  
+  - Default value: None, all defined  
+  - Range of values: 72337
+  - Simplified analysis of the distribution: We have one County name per census tract
+  - Are these values unique: Yes  
+  - Will you use this value to detect duplicates: No
+  - Is this a required value: Yes can be used to join Food Desert data 
+  - Do you plan to use this attribute/feature in the analysis:Yes, we can use TractFIPS to map health status to food desert status as the Food Atlas gives us Census Tract level data.
+  - Does this feature include potentially sensitive information: No
+ 
+- **MHLTH_CrudePrev** :: crude prevalence of mental health not good for >=14 days 2019 
+  - Type of data: Number  
+  - Default value: None, all defined  
+  - Range of values: 5.5 - 38.6
+  - Simplified analysis of the distribution: One score per census tract
+  - Are these values unique: No  
+  - Will you use this value to detect duplicates: No
+  - Is this a required value: Yes contains the prevalence of mental health issues in a particular census tract
+  - Do you plan to use this attribute/feature in the analysis:Yes will be used as a separate column per census tract and eventually used at the County Level to experiment with the relationship between Food Deserts, Health Outcomes and Student Performance
+  - Does this feature include potentially sensitive information: No
+
+- **SLEEP_CrudePrev** :: crude prevalence of sleeping less than 7 hours 
+  - Type of data: Number  
+  - Default value: None, all defined  
+  - Range of values: 20.2 - 60.8
+  - Simplified analysis of the distribution: One score per census tract
+  - Are these values unique: No  
+  - Will you use this value to detect duplicates: No
+  - Is this a required value: Yes contains the prevalence of sleep in a particular census tract
+  - Do you plan to use this attribute/feature in the analysis: Yes will be used as a separate column per census tract and eventually used at the County Level to experiment with the relationship between Food Deserts, Health Outcomes and Student Performance
+  - Does this feature include potentially sensitive information: No  
 
 # [The Educational Opportunity Project](https://edopportunity.org/)
 
