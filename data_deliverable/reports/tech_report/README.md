@@ -1,4 +1,4 @@
-# Data Deliverable
+# Data Deliverable: Tech Report Questions
 
 ## [Food Access Research Atlas](https://www.ers.usda.gov/data-products/food-access-research-atlas)
 
@@ -6,143 +6,10 @@ Dataset: [https://www.ers.usda.gov/data-products/food-access-research-atlas/down
 
 For our main data analysis, we plan to filter the data into **3** categories: **Urban** **counties** that fit the food desert criteria, **Rural** **counties** that fit the food desert criteria, and all other counties (which we will call **non-food-deserts counties**). Then, we will cross reference these groups with their average standardized testing scores \+ health rates using our other 2 datasets.
 
-Dataset: [https://www.ers.usda.gov/data-products/food-access-research-atlas/download-the-data](https://www.ers.usda.gov/data-products/food-access-research-atlas/download-the-data) 
-
-For our main data analysis, we plan to filter the data into **3** categories: **Urban** **counties** that fit the food desert criteria, **Rural** **counties** that fit the food desert criteria, and all other counties (which we will call **non-food-deserts counties**). Then, we will cross reference these groups with their average standardized testing scores \+ health rates using our other 2 datasets.
-
 ### Data Attributes
+Located in the Final Project Data Skim Markdown (./final-projects-mink/Final Project Data Skim.md)
 
-- **CensusTract** :: Census tract number  
-  - Type of data: Number  
-  - Default value: None, all defined  
-  - Range of value: 1001020100 \- 56045951300  
-  - Simplified analysis of the distribution of values: An 11-digit number that identifies a specific census tract within a state and county. The number is made up of a state code, county code, and tract code.  
-  - Are these values unique?: Yes  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No, there will be no duplicate records  
-  - Is this a required value? Yes  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? As a PRIMARY KEY, in order to cross this dataset with our other 2  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- **State** :: State name  
-  - Type of data: Text  
-  - Default value: None, all defined  
-  - Range of value: Alabama \- Wyoming  
-  - Simplified analysis of the distribution of values: 50 states in USA  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? Yes  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? Likely for our map / interactive component  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- **County** :: County name  
-  - Type of data: Text  
-  - Default value: None, all defined  
-  - Range of value: Abbeville County \- Ziebach County  
-  - Simplified analysis of the distribution of values: All counties in USA  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? Yes  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? Likely for our map / interactive component  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- **Urban** :: Flag for urban area  
-  - Type of data: Boolean flag  
-  - Default value: 0  
-  - Range of value: 0 or 1  
-  - Simplified analysis of the distribution of values: 0 \= false, 1 \= true  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? Yes  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be needed in our 3 category food desert classification  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No
-
-Attributes needed to define food deserts:
-
-- **LATracts\_half** :: Flag (0 or 1\) for low access tract when considering 1/2 mile distance  
-  - Type of data: Boolean flag  
-  - Default value: 0  
-  - Range of value: 0 or 1  
-  - Simplified analysis of the distribution of values: 0 \= false, 1 \= true  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? Yes  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be needed in our 3 category food desert classification  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- **LATracts10** :: Flag (0 or 1\) for low access tract when considering 10 mile distance  
-  - Type of data: Boolean flag  
-  - Default value: 0  
-  - Range of value: 0 or 1  
-  - Simplified analysis of the distribution of values: 0 \= false, 1 \= true  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? Yes  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be needed in our 3 category food desert classification  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- **PovertyRate** :: Share (%) of the area population living with income at or below the Federal poverty thresholds for family size   
-  - Type of data: Integer  
-  - Default value: NULL  
-  - Range of value: 0-100  
-  - Simplified analysis of the distribution of values:  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? No, there are some NULL values we will clean out  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be needed in our 3 category food desert classification  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- **LowIncomeTracts** :: Flag (0 or 1\) for low income area  
-  - Type of data: Boolean flag  
-  - Default value: 0  
-  - Range of value: 0 or 1  
-  - Simplified analysis of the distribution of values: 0 \= false, 1 \= true  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? Yes  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be needed in our 3 category food desert classification  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No
-
-With these attributes, we can now filter the data to organize our counties into the 3 categories mentioned above.
-
-Other Attributes:
-
-- **Lahunvhalfshare** :: Share (%) of tract housing units that are without vehicle and beyond 1/2 mile from supermarket  
-  - Type of data: Integer  
-  - Default value: NULL  
-  - Range of value: 0-100  
-  - Simplified analysis of the distribution of values: Percentage share  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? No, there are some NULL values we will clean out  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be used to analyze if vehicle access plays a part in whether the food desert populations change  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- **Lahunv10share** :: Share (%) of tract housing units that are without vehicle and beyond 10 miles from supermarket   
-  - Type of data: Integer  
-  - Default value: NULL  
-  - Range of value: 0-100  
-  - Simplified analysis of the distribution of values: Percentage share  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? No, there are some NULL values we will clean out  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be used to analyze if vehicle access plays a part in whether the food desert populations change  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- With these 2 attributes, we can make our own definition of whether the county is considered a low-vehicle population (ex. \< 30% of housing units)  
-- (maybe) **lasnaphalfshare** :: Share (%) of tract housing units receiving SNAP benefits count beyond 1/2 mile from supermarket  
-  - Type of data: Integer  
-  - Default value: NULL  
-  - Range of value: 0-100  
-  - Simplified analysis of the distribution of values: Percentage share  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? No, there are some NULL values we will clean out  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be used to analyze if SNAP benefit access plays a part in whether the food desert populations change  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No  
-- (maybe) **lasnap10share** :: Share (%) of tract housing units receiving SNAP benefits count beyond 10 miles from supermarket   
-  - Type of data: Integer  
-  - Default value: NULL  
-  - Range of value: 0-100  
-  - Simplified analysis of the distribution of values: Percentage share  
-  - Are these values unique?: No  
-  - Will you use this value (maybe in composition with others) to detect possible duplicate records? If so, how? No  
-  - Is this a required value? No, there are some NULL values we will clean out  
-  - Do you plan to use this attribute/feature in the analysis? If so, how? This attribute will be used to analyze if SNAP benefit access plays a part in whether the food desert populations change  
-  - Does this feature include potentially sensitive information? If so, how do you suggest handling such issues? No
-
-### Tech Report Questions
+### Tech Report Questions (Food Access Research Atlas)
 
 * **How many data points are there in total?** How many are there in each group you care about (e.g. if you are dividing your data into positive/negative examples, are they split evenly)?   
   * Aim for a resource of reasonable size. **At least 700 records (at least 1000 records for capstone projects)** after cleaning and duplicate removal. Account that part of your data should be used for validation of your results only.   
@@ -181,11 +48,46 @@ Other Attributes:
   * The observations we have made so far are that there are various datasets revolving around health that utilize the census tract as a primary key. This is beneficial because the data is public and published by reliable sources such as the CDC. This abundance of data allows us to analyze how food deserts affect the health of students and then examine their performance in schools. Still a challenge remains ensuring we take into account the missing data found in the educational opportunity dataset. Lastly we need to handle potential lost rows during joins to ensure we are not skewing are data
 
 
+# [National Center for Education Statistics (NCES) School District Geographic Relationship](https://nces.ed.gov/programs/edge/geographic/relationshipfiles)
+
+Dataset: [https://nces.ed.gov/programs/edge/geographic/relationshipfiles](https://nces.ed.gov/programs/edge/geographic/relationshipfiles)
+
+This dataset provides a mapping from Local Education Agency Identification numbers to census tract numbers, allowing us to map standardized academic performance data from the SEDA dataset to the CDC and food desert data sets mentioned above.
+
+### Data Attributes 
+Located in the Final Project Data Skim Markdown (./final-projects-mink/Final Project Data Skim.md)
+
+### Tech Report Questions (NCES)
+
+Total datapoints: 113,520
+- There is enough data to perform analysis as this dataset is being used to map one dataset to another. We may use the area of the different census tracts.
+
+Identifying attributes: LEAID, NAME_LEA19, TRACT, LANDAREA
+
+Where is the data from: NCES
+- How did you collect your data: downloaded from their website
+- Is the source reputable: yes
+- How did you generate these sample: N/A - defined by government. this is being used for mapping purposes.
+- Other considerations: N/A
+
+How clean is the data:
+- as clean as it can get; solely used for mapping datasets to each other
+- no mechanism to clean data
+- no missing values or duplicates
+- data distribution is n/a
+- no data type issues
+- no need to throw data away
+
+Challenges:
+- no challenges with this dataset. this helps decrease the challenges of our other datasets as this helps us map the food, health, and education datasets to create one big dataset. this will be used to combine our datasets.
+
+
 ## [SEDA Dataset](https://edopportunity.org/opportunity/data/downloads/)
 
 ### Data Attributes 
+Located in the Final Project Data Skim Markdown (./final-projects-mink/Final Project Data Skim.md)
 
-### Tech Report Questions
+### Tech Report Questions (SEDA)
 
 Total datapoints: 354949
 - While this dataset contains missing values, based on an initial analysis we should have enough for analysis when joining with the Food Atlas dataset
@@ -199,10 +101,14 @@ Where is the data from: Stanford Educational Opportunity Project Data Archive (S
 - Other considerations: there are lots of missing values so we will need to conduct our analysis on a subset. As such, we need to consider biases that might be introduced when filtering.
 
 How clean is the data:
-- When we have values, the data is pretty clean. However, we do have relatively large amounts of missing data that is scattered in various feature columns of the dataset.
-- The data is already standardized by SEDA to account for local and national variances in testing such that we can compare standarized scores directly.
+- When we have values, the data is pretty clean (checked via verifying datatypes). However, we do have relatively large amounts of missing data that is scattered in various feature columns of the dataset. The threshold reference was having unique identifying information which included state abbreviation, seda admin ID, subject, and grade information. Histogrms were also generated to ensure that there were no concerning outliers.
+- No cleaning mechanisms were employed as the data was clean.
+- There are missing values. These occur in fields that are important for the project's goals. (See the last bullet for our approach to this)
+- There are no duplicates.
+- The data is already standardized by SEDA to account for local and national variances in testing such that we can compare standarized scores directly. There were no outliers. The min/max is not relevant as everything is on a standardized scale.
+- There are no data type issues.
 - We will most likely need to throw away entire counties where we don't have enough data. This will most likely be on a case by case basis for specific analysis questions. For example, a given county might be included in out analysis when looking at scores across gender but not when looking at race due to missing data. One potential issue in this is that we could introduce biases where regions with better education infrastructre and performance reporting might be over represented in out analysis datasets.
 
 Challenges:
-- Joining with the Food Atlas dataset will be relatively easy but selecting the subsets of the data we will use for our analysis questions will be more involved and require careful stratified sampling techniques to avoid introducing biases.
+- Joining with the Food Atlas dataset will be relatively easy but selecting the subsets of the data we will use for our analysis questions will be more involved and require careful stratified sampling techniques to avoid introducing biases. Another challenge is that the combined dataset is extremely large as everything school district in the dataset covers multiple census tracts so the join operations will yield a very deep and long table. The datasets are in a sql db and we will now begin to train machine learning models.
 
