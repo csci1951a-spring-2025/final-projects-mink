@@ -47,6 +47,41 @@ Located in the Final Project Data Skim Markdown (./final-projects-mink/Final Pro
 * Summarize any challenges or observations you have made since collecting your data. Then, discuss your next steps and how your data collection has impacted the type of analysis you will perform. (approximately 3-5 sentences)  
   * The observations we have made so far are that there are various datasets revolving around health that utilize the census tract as a primary key. This is beneficial because the data is public and published by reliable sources such as the CDC. This abundance of data allows us to analyze how food deserts affect the health of students and then examine their performance in schools. Still a challenge remains ensuring we take into account the missing data found in the educational opportunity dataset. Lastly we need to handle potential lost rows during joins to ensure we are not skewing are data
 
+# [CDC PLACES: Census Tract Data](https://www.cdc.gov/places/index.html)
+
+Dataset: [https://data.cdc.gov/500-Cities-Places/PLACES-Census-Tract-Data-GIS-Friendly-Format-2021-/mb5y-ytti/about\_data](https://data.cdc.gov/500-Cities-Places/PLACES-Census-Tract-Data-GIS-Friendly-Format-2021-/mb5y-ytti/about_data)
+
+The PLACES project provides local data on the health status of locations across the United States. Specifically the 2021 release publishes data on the state of 2019\. In addition the data is formatted with County Name and Census Tract. These columns provide flexibility and allow for a seamless join between the Food Desert, Educational, and CDC Health data. The dataset presents multiple health status to monitor, but for our case we are prioritizing sleep deprivation and mental health status.
+
+### Data Attributes 
+Located in the Final Project Data Skim Markdown (./final-projects-mink/Final Project Data Skim.md)
+
+### Tech Report Questions
+Total datapoints: 72335 across the U.S
+- There is enough data to perform analysis especially since the Food Desert data has around the same total points. This allows for an easier join and a more complete data table after a join.
+
+Identifying attributes: TractFIPS because there is only one row per tract id.
+
+Where is the data from: Centers for Disease Control and Prevention (CDC) 
+- How did you collect your data: Downloaded from their website
+- Is the source reputable: yes federal public health agency under the U.S. Department of Health and Human Services
+- How did you generate these sample: N/A  defined by the CDC
+- Other considerations: N/A
+
+ How clean is the data:
+- The data is clean as there are no duplicates and the data comes from a trusted source. Additionally there are no null values for data regarding sleep deprivation and mental health status
+- No mechanism to clean data as the data is alraedy clean
+- No missing values or duplicates
+- Data distribution
+  - Ranges for sleep deprivation: 20.2 - 60.8
+     - Slightly skewed with the most data being seen around 34-40%
+  - Ranges for mental health score 5.5 38.6
+     - Slightly right skewed with the most data being seen around 12-16%
+- No data type issues
+- No need to throw data away
+
+Challenges:
+There is no challenge in collecting this data. The data is formatted properly and joins well with the food desert data. Since we can join both Food Desert and Health outcomes per tract we plan on researching the relationship between food deserts/health and how they play a role in education outcomes. The next steps will be to join with the educational data set to construct an appropriate table containing educational results per region.
 
 # [National Center for Education Statistics (NCES) School District Geographic Relationship](https://nces.ed.gov/programs/edge/geographic/relationshipfiles)
 
