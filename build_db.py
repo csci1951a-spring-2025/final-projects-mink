@@ -27,6 +27,7 @@ if __name__ == "__main__":
     df.to_sql("food", conn, if_exists="replace", index=False)
 
     df = pd.read_csv("./data/cdc_health_data.csv")
+    df = df[["StateAbbr", "CountyName", "TractFIPS", "MHLTH_CrudePrev", "SLEEP_CrudePrev"]]
     df.to_sql("cdc", conn, if_exists="replace", index=False)
 
     df = pd.read_csv("./data/seda_admindist_long_gcs_5.0_updated_20240319.csv")
