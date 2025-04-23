@@ -19,7 +19,7 @@ For example, the t-statistic of 364.736 between White and Black groups indicates
 ## Analysis Question 2: Is there statistical significance in academic performance between urban food deserts, rural food deserts, and non food deserts?
 
 ### Why did you use this statistical test or ML algorithm? Which other tests did you consider or evaluate? What metric(s) did you use to measure success or failure, and why did you use it? What challenges did you face evaluating the model? Did you have to clean or restructure your data?
-For this research question, we used a one sample t-test to compare the mean average academic performance of food deserts against the standard known mean score of Non-Food Desert communities. Ultimately one sample t-test helps determine if the mean score in our food deserts are statistically significantly different from the non-food desert mean. I considered to use two sample t-test but decided a one-sample test could be leveraged as non-food desererts represents a good baseline population.
+For this research question, we used a one sample t-test to compare the mean average academic performance of food deserts against the standard known mean score of Non-Food Desert communities. Ultimately one sample t-test helps determine if the mean score in our food deserts are statistically significantly different from the non-food desert mean. I considered to use two sample t-test but decided a one-sample test could be leveraged as non-food deserts represents a good baseline population.
 
 The metrics we used to measure the success of our tests were the p-value scores from the one-sample t-test to determine statistical significance. A p-value less than 0.05 indicates that the difference in group means is statistically significant — meaning it's unlikely the difference is due to random chance. The t-statistic score also assess the magnitude of difference where larger values indicate more separation between groups. We ran the one-sample t-test to fully understand the differences in scores between urban/rural food deserts vs non food desert communities.
 
@@ -132,9 +132,14 @@ Specifically we noticed that the t-stat value increased in magnitude significant
 
 ## Overall Analysis
 ### Did you find the results corresponded with your initial belief in the data? If yes/no, why do you think this was the case?
+Yes and no, see our individual responses for each analsysi question above for further explanation.
 
 ### Do you believe the tools for analysis that you chose were appropriate? If yes/no, why or what method could have been used?
+Yes, the tools we chose (mainly independent two-sample t-tests) were appropriate for our analysis questions. For each of our goals to compare means of education scores or prevalence of sleep deprivation across different racial groups and area types, t-test were a statistically valid method to assess whether the observed differences are likely due to chance or represent meaningful disparities.
+
+For further analysis, we also decided to use grouped bar charts and descriptive statistics (mean, variance, std) provided a solid foundation to visually interpret the differences in our attributes across area types. This helped us support our findings verified in our t-tests.
+
+See our individual responses for each analysis qeustion above for further explanation.
 
 ### Was the data adequate for your analysis? If not, what aspects of the data were problematic and how could you have remedied that?
-
-
+Yes, the data was adequeate for our analysis. The sample size is quite large with 995,894 entries, and even after cleaning for missing values in all our used attributes' columns, with over 106,228 entries.
