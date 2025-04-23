@@ -143,3 +143,152 @@ See our individual responses for each analysis qeustion above for further explan
 
 ### Was the data adequate for your analysis? If not, what aspects of the data were problematic and how could you have remedied that?
 Yes, the data was adequeate for our analysis. The sample size is quite large with 995,894 entries, and even after cleaning for missing values in all our used attributes' columns, with over 106,228 entries.
+
+# ML Component
+
+For our ML tasks we trained two models: 1) XGBoost classifier and 2) K-Means clustering. For both of our models, we used the pairwise combinations of the `Urban` and `LATracts_half` binary categorical columns. After dropping rows with `nan` values in the relevant feature columns we were left with 3 distinct classes in our dataset: `11` (urban and food desert), `10` (urban and not food desert), and `00` (not urban and not food desert). There were no `01` class data points after filtering out rows with `nan` values. The resulting dataset has a significant imbalance:
+
+| y   | count |
+| -   | -     |
+| 11  | 79328 |
+| 10  | 9816  |
+| 00  | 5369  |
+
+For the training features, we use all the academic performance data as well as the `SLEEP_CrudePrev` and `MHLTH_CrudePrev` columns from the health dataset. We use a greedy search to remove the minimum number of features to remove any pairwise Pearson Correlation coefficients above 0.95. This was done to remove any potentially unnecessary/collinear columns. The dataset was then split and used for K-fold cross validation. Both of these steps were done with stratification based on the target variable. We also split the dataset by academic subject and trained each of our models on each. Out research hypothesis for our ML models is: can we predict the class (urban + food desert) of a given census tract using sleep/mental health and standardized academic performance. Given the large class imbalance (83.54% and 83.31% majority classes in the Math and RLA datasets), if any of our models can outperform the baseline accuracies that suggests that there is a predictive relationship between our features and labels.
+
+## Model 1: XGBoost classifier
+
+We used XGBoost as it is the state-of-the-art when it comes to quick and easily applied ML algorithms, often outperforming deep neural networks and other complex ML algorithms. Additionally, XGBoost is an ensemble model that consists of decision trees which are good for interpretation. We use the following parameter grid for training and validation:
+
+| parameter | values  |
+| - | - |
+| `learning_rate`     | [0.3, 0.1, 0.05]  |
+| `max_depth`         | [32, 64]  |
+| `subsample`         | [0.5, 0.75, 1.0] |
+| `colsample_bytree`  | [0.5, 0.75, 1.0] |
+| `gamma`             | [0.0, 0.1, 0.5] |
+
+`n_estimators` was set to 100,000 to ensure that the models could converge and hit early stopping (described below).
+
+We used a 5-fold stratified cross validation. For each fold, we also included early stopping with the fold validation set. Due to the class imbalance in the dataset, we also applied a sample weighting scheme that scales the impact of each sample based on the distribution of the labels across the dataset. Specifically, this takes affect in two places: 1) it weights how much XGBoost considers each sample when it trains its ensemble trees and 2) it allows ut to calculate a balanced accuracy metric on the results. For our main evaluation metric we vanilla accuracy score. However, we also calculate balanced accuracy (weighted by distribution), weighted multiclass precision, weighted multiclass recall, and weighted multiclass f1 scores.
+
+### Math Dataset
+
+Our optimal parameters for the math dataset are:
+
+| parameter | values  |
+| - | - |
+| `learning_rate`     | 0.1  |
+| `max_depth`         | 64 |
+| `subsample`         | 1.0 |
+| `colsample_bytree`  | 1.0 |
+| `gamma`             | 0.0 |
+
+The dataset's baseline accuracy is 83.54% as that is the percentage of all the data points which belong to the dominant class. By default, balanced accuracy has a baseline score of $\frac{1}{n}$ where $n$ is the number of classes - in our case, this is 33%. Below is the table of all result metrics for the best parameters when trained on the whole math dataset:
+
+| Metric                 | Train   | Validation | Test    |
+|------------------------|---------|------------|---------|
+| Accuracy               | 0.9939  | 0.9190     | 0.9180  |
+| Balanced Accuracy      | 0.9974  | 0.8165     | 0.8132  |
+| Precision              | 0.9941  | 0.9189     | 0.9172  |
+| Recall                 | 0.9939  | 0.9190     | 0.9180  |
+| F1 Score               | 0.9939  | 0.9189     | 0.9176  |
+
+As we can see, the model scores approximately 8.4% higher than the already high baseline accuracy. Additionally, this performance extends to the minority classes as can be seen by the 81.32% balanced accuracy on the test set. This is also supported by the >0.9 precision, recall, and f1 scores.
+
+As XGBoost provides access to its feature weights, we also investigated which features were most important in the trained model.
+
+![Math XGBoost Important Features](../graphs/math_xgboost_features.png)
+
+As we can see in the graph, XGBoost places a significant amount of importance in the health features. The top academic dataset features were `gcs_mn_wag` (average score gap between white and asian students) and `tot_asmt_asn` (number of observed asian students) followed by total counts of observed black students and the white-native-american student gap. Overall, gap metrics and counts of samples per race seemed to be the most important academic dataset features.
+
+### Reading/Language Arts Dataset
+
+Our optimal parameters for the math dataset are:
+
+| parameter | values  |
+| - | - |
+| `learning_rate`     | 0.1  |
+| `max_depth`         | 64 |
+| `subsample`         | 1.0 |
+| `colsample_bytree`  | 1.0 |
+| `gamma`             | 0.0 |
+
+The dataset's baseline accuracy is 83.31%. Below is the table of all result metrics for the best parameters when trained on the whole math dataset:
+
+| Metric                 | Train   | Validation | Test    |
+|------------------------|---------|------------|---------|
+| Accuracy               | 0.9944  | 0.9315     | 0.9301  |
+| Balanced Accuracy      | 0.9972  | 0.8335     | 0.8366  |
+| Precision              | 0.9946  | 0.9310     | 0.9301  |
+| Recall                 | 0.9944  | 0.9315     | 0.9301  |
+| F1 Score               | 0.9945  | 0.9312     | 0.9301  |
+
+Again, we can see that the model scores approximately 8.4% higher than the already high baseline accuracy. This performance extends to the minority classes as can be seen by the 83.66% balanced accuracy on the test set. This is also supported by the >0.93 precision, recall, and f1 scores.
+
+![RLA XGBoost Important Features](../graphs/rla_xgboost_features.png)
+
+Similarly to the math dataset, XGBoost places a significant amount of importance in the health features. The top academic dataset features were `gcs_mn_wag` (average score gap between white and asian students) and `gcs_mn_whg` (same for white hispanic students) followed by total counts of observed asian and black students. Again, gap metrics and counts of samples per race seemed to be the most important academic dataset features.
+
+
+## Model 2: K-Nearest Neighbors Clustering
+
+We used K-Nearest Neighbors (KNN) as it is a simple and interpretable unsupervised machine learning algorithm that also supports one-hot encoded categorical features. We use the following parameter grid for training and validation:
+
+| parameter | values  |
+| - | - |
+| `n_neighbors`     | [3, 5, 7, 9, 11]  |
+| `weights`         | ["uniform", "distance"]  |
+| `p`         | [1, 2] |
+
+* `p` refers to manhattan vs euclidean distance for neighbor calculations
+
+We also used a 5-fold stratified cross validation for KNN. Again, we stratified our dataset for the initial `train_test_split` and the k-fold cross validation. Along with accuracy and balance accuracy, we also reported the adjusted rand index (`ARI`), normalized mutual information (`NMI`), and the homogeneity score of the clusters. `ARI` measures the similarity between two clusterings by considering all pairs of samples and counting pairs that are assigned consistently in both clusterings. It adjusts for chance, meaning a score of 0 indicates random labeling, while 1 means perfect match. `NMI` quantifies the mutual dependence between the predicted and true labels using information theory; it normalizes mutual information by the average entropy of the labelings, ranging from 0 (no mutual information) to 1 (perfect correlation). Homogeneity measures whether each cluster contains only members of a single class. It is computed using entropy: a cluster is homogeneous if all its elements belong to the same ground-truth class, with values ranging from 0 to 1.
+
+Unlike the XGBoost model, we used the average of all the metrics (accuracy, balanced accuracy, `ARI`, `NMI`, and homogeneity) for the selection of best parameters in the cross validation. This works as these are all 0-1 metrics where 1 is a perfect score.
+
+### Math Dataset
+
+Our optimal parameters for the math dataset using KNN are:
+
+| Parameter       | Value          |
+|----------------|----------------|
+| `n_neighbors`  | 7              |
+| `weights`      | uniform        |
+| `p` (distance) | 2 (Euclidean)  |
+
+The baseline accuracy for the math dataset remains **83.54%**, corresponding to the majority class proportion. Balanced accuracy, with three classes, has a baseline of **33.33%**. Below is the table of evaluation metrics for the best KNN parameters trained and evaluated on the dataset:
+
+| Metric                 | Train   | Test    |
+|------------------------|---------|---------|
+| Accuracy               | 0.9949  | 0.7963  |
+| Balanced Accuracy      | 0.9927  | 0.4024  |
+| Adjusted Rand Index    | 0.9775  | 0.0763  |
+| Normalized Mutual Info | 0.9434  | 0.0328  |
+| Homogeneity            | 0.9472  | 0.0266  |
+
+Although the overall accuracy is comparable to the baseline, the balanced accuracy reveals the model struggles with minority class performance. Cluster-based metrics such as ARI and NMI are also low, indicating limited clustering performance when compared to the true labels. These results suggest that KNN captures majority class trends but lacks the discrimination power for complex multi-class separation in this dataset.
+
+---
+
+### Reading/Language Arts Dataset
+
+Our optimal parameters for the RLA dataset using KNN are:
+
+| Parameter       | Value         |
+|----------------|---------------|
+| `n_neighbors`  | 5             |
+| `weights`      | uniform       |
+| `p` (distance) | 2 (Manhattan) |
+
+The baseline accuracy for the RLA dataset is **83.31%**. The table below presents the result metrics for the best KNN parameters:
+
+| Metric                 | Train   | Test    |
+|------------------------|---------|---------|
+| Accuracy               | 0.8578  | 0.8181  |
+| Balanced Accuracy      | 0.4750  | 0.3911  |
+| Adjusted Rand Index    | 0.2569  | 0.0794  |
+| Normalized Mutual Info | 0.1369  | 0.0297  |
+| Homogeneity            | 0.1012  | 0.0223  |
+
+Similar to the math results, the accuracy on the test set is near the baseline, but the model has difficulty generalizing to minority classes, as shown by a balanced accuracy under 40%. The clustering evaluation metrics (ARI, NMI, homogeneity, etc.) are low, suggesting the decision boundaries formed by KNN are not well aligned with the true class structure in this educational context.
