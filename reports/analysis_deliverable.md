@@ -170,7 +170,7 @@ We used XGBoost as it is the state-of-the-art when it comes to quick and easily 
 
 `n_estimators` was set to 100,000 to ensure that the models could converge and hit early stopping (described below).
 
-We used a 5-fold stratified cross validation. For each fold, we also included early stopping with the fold validation set. Due to the class imbalance in the dataset, we also applied a sample weighting scheme that scales the impact of each sample based on the distribution of the labels across the dataset. Specifically, this takes affect in two places: 1) it weights how much XGBoost considers each sample when it trains its ensemble trees and 2) it allows ut to calculate a balanced accuracy metric on the results. For our main evaluation metric we vanilla accuracy score. However, we also calculate balanced accuracy (weighted by distribution), weighted multiclass precision, weighted multiclass recall, and weighted multiclass f1 scores.
+We used a 5-fold stratified cross validation. For each fold, we also included early stopping with the fold validation set. Due to the class imbalance in the dataset, we also applied a sample weighting scheme that scales the impact of each sample based on the distribution of the labels across the dataset. Specifically, this takes affect in two places: 1) it weights how much XGBoost considers each sample when it trains its ensemble trees and 2) it allows ut to calculate a balanced accuracy metric on the results. For our main evaluation metric we vanilla accuracy score. However, we also calculate balanced accuracy (weighted by distribution), weighted multiclass precision, weighted multiclass recall, and weighted multiclass f1 scores. Precision is a measure of our model's positive prediction quality (i.e. how many positive predicitions are actually correct) while recall is a measure of how well we identified all positive points. For the multiclass variations, we calculate these metrics in a pairwise fashion and weight the scores by class distribution. F1 score is a more generalized measure of predictive performance that combines precision and recall.
 
 ### Math Dataset
 
@@ -230,6 +230,8 @@ Again, we can see that the model scores approximately 8.4% higher than the alrea
 
 Similarly to the math dataset, XGBoost places a significant amount of importance in the health features. The top academic dataset features were `gcs_mn_wag` (average score gap between white and asian students) and `gcs_mn_whg` (same for white hispanic students) followed by total counts of observed asian and black students. Again, gap metrics and counts of samples per race seemed to be the most important academic dataset features.
 
+Intuitively, our results seem reasonable since worse access to high quality food is often associated with lower quality of living which can contribute to health issues. These can manifest in the form of of lower mental health scores or sleep quality. Adding on, these health concerns can affect a student's ability to perform well in school, thus resulting in worse academic performance. We were surprised, however, by how important the health features were in our trained XGBoost model.
+
 
 ## Model 2: K-Nearest Neighbors Clustering
 
@@ -243,7 +245,7 @@ We used K-Nearest Neighbors (KNN) as it is a simple and interpretable unsupervis
 
 * `p` refers to manhattan vs euclidean distance for neighbor calculations
 
-We also used a 5-fold stratified cross validation for KNN. Again, we stratified our dataset for the initial `train_test_split` and the k-fold cross validation. Along with accuracy and balance accuracy, we also reported the adjusted rand index (`ARI`), normalized mutual information (`NMI`), and the homogeneity score of the clusters. `ARI` measures the similarity between two clusterings by considering all pairs of samples and counting pairs that are assigned consistently in both clusterings. It adjusts for chance, meaning a score of 0 indicates random labeling, while 1 means perfect match. `NMI` quantifies the mutual dependence between the predicted and true labels using information theory; it normalizes mutual information by the average entropy of the labelings, ranging from 0 (no mutual information) to 1 (perfect correlation). Homogeneity measures whether each cluster contains only members of a single class. It is computed using entropy: a cluster is homogeneous if all its elements belong to the same ground-truth class, with values ranging from 0 to 1.
+We also used a 5-fold stratified cross validation for KNN. Again, we stratified our dataset for the initial `train_test_split` and the k-fold cross validation. Along with accuracy and balanced accuracy, we also reported the adjusted rand index (`ARI`), normalized mutual information (`NMI`), and the homogeneity score of the clusters. `ARI` measures the similarity between two clusterings by considering all pairs of samples and counting pairs that are assigned consistently in both clusterings. It adjusts for chance, meaning a score of 0 indicates random labeling, while 1 means perfect match. `NMI` quantifies the mutual dependence between the predicted and true labels using information theory; it normalizes mutual information by the average entropy of the labelings, ranging from 0 (no mutual information) to 1 (perfect correlation). Homogeneity measures whether each cluster contains only members of a single class. It is computed using entropy: a cluster is homogeneous if all its elements belong to the same ground-truth class, with values ranging from 0 to 1.
 
 Unlike the XGBoost model, we used the average of all the metrics (accuracy, balanced accuracy, `ARI`, `NMI`, and homogeneity) for the selection of best parameters in the cross validation. This works as these are all 0-1 metrics where 1 is a perfect score.
 
@@ -269,7 +271,6 @@ The baseline accuracy for the math dataset remains **83.54%**, corresponding to 
 
 Although the overall accuracy is comparable to the baseline, the balanced accuracy reveals the model struggles with minority class performance. Cluster-based metrics such as ARI and NMI are also low, indicating limited clustering performance when compared to the true labels. These results suggest that KNN captures majority class trends but lacks the discrimination power for complex multi-class separation in this dataset.
 
----
 
 ### Reading/Language Arts Dataset
 
@@ -291,4 +292,4 @@ The baseline accuracy for the RLA dataset is **83.31%**. The table below present
 | Normalized Mutual Info | 0.1369  | 0.0297  |
 | Homogeneity            | 0.1012  | 0.0223  |
 
-Similar to the math results, the accuracy on the test set is near the baseline, but the model has difficulty generalizing to minority classes, as shown by a balanced accuracy under 40%. The clustering evaluation metrics (ARI, NMI, homogeneity, etc.) are low, suggesting the decision boundaries formed by KNN are not well aligned with the true class structure in this educational context.
+Similar to the math results, the accuracy on the test set is near the baseline, but the model has difficulty generalizing to minority classes, as shown by a balanced accuracy under 40%. The clustering evaluation metrics (ARI, NMI, homogeneity, etc.) are low, suggesting the decision boundaries formed by KNN are not well aligned with the true class structure in this educational context. While we were able to learn some signal, it seems that KNNs (and maybe other unsupervised methods) may not be good for our ML task. Given the performance of our XGBoost model, we were surprised by the lack of performance in the KNN model.
