@@ -74,6 +74,41 @@ html = """
         </tr>
     </table>
     {% endif %}
+    
+    <h2>View Food Desert Comparison Results</h2>
+    <form method="POST" action="/food">
+        <label for="area">Select Area Type:</label>
+        <select id="area" name="area" required>
+            {% for area in areas %}
+            <option value="{{ area }}">{{ area }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <button type="submit">Show Food Desert Result</button>
+    </form>
+
+    {% if food_result %}
+    <h3>Food Desert Comparison Result:</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Group 1</th>
+            <th>Group 2</th>
+            <th>T-Statistic</th>
+            <th>P-Value</th>
+            <th>Significance</th>
+        </tr>
+        <tr>
+            <td>{{ food_result['Group_1'] }}</td>
+            <td>{{ food_result['Group_2'] }}</td>
+            <td>{{ food_result['T-Statistic'] }}</td>
+            <td>{{ food_result['P-Value'] }}</td>
+            <td>{{ food_result['Significance'] }}</td>
+        </tr>
+    </table>
+    {% endif %}
+
 </body>
 </html>
 """
@@ -119,10 +154,26 @@ def get_area_result(area):
     else:
         return None
 
+# Load data for food desert comparison (Question 3)
+q3_df = pd.read_csv("results/q3.csv")
+
+def get_food_desert_result(group):
+    row = q3_df[q3_df['Group_1'] == group] 
+    if not row.empty:
+        return {
+            "Group_1": row.iloc[0]['Group_1'],
+            "Group_2": row.iloc[0]['Group_2'],
+            "T-Statistic": f"{row.iloc[0]['T-Statistic']:.3f}",
+            "P-Value": f"{row.iloc[0]['P-Value']:.2e}",
+            "Significance": row.iloc[0]['Significance']
+        }
+    else:
+        return None
+
 # Home route
 @app.route('/', methods=['GET'])
 def home():
-    return render_template_string(html, races=race_labels, areas=area_labels, race_result=None, area_result=None)
+    return render_template_string(html, races=race_labels, areas=area_labels)
 
 # Race comparison route
 @app.route('/race', methods=['POST'])
@@ -134,7 +185,7 @@ def race_compare():
         result = compare_races(race1, race2)
     else:
         result = "Please select two different race groups."
-    return render_template_string(html, races=race_labels, areas=area_labels, race_result=result, area_result=None)
+    return render_template_string(html, races=race_labels, race_result=result)
 
 # Area comparison route
 @app.route('/area', methods=['POST'])
@@ -143,7 +194,15 @@ def area_compare():
     result = None
     if area:
         result = get_area_result(area)
-    return render_template_string(html, races=race_labels, areas=area_labels, race_result=None, area_result=result)
+    return render_template_string(html, areas=area_labels, area_result=result)
+
+@app.route('/food', methods=['POST'])
+def food_compare():
+    area = request.form.get('area')
+    result = None
+    if area:
+        result = get_food_desert_result(area)
+    return render_template_string(html, areas=area_labels, food_result=result)
 
 if __name__ == "__main__":
     app.run(debug=True)
