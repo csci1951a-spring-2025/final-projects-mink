@@ -14,6 +14,9 @@ html = """
 </head>
 <body>
     <h1>Compare Academic Scores Between Race Groups</h1>
+    <h3>Visualization:</h3>
+    <img src="{{ url_for('static', filename='graphs/race_group_academic_scores.png') }}" alt="Graph 2" width="500">
+    
     <form method="POST" action="/race">
         <label for="race1">Select first race:</label>
         <select id="race1" name="race1" required>
@@ -37,11 +40,29 @@ html = """
     </form>
 
     {% if race_result %}
-    <h2>Result:</h2>
-    <p>{{ race_result }}</p>
+    <h2>Academic Scores Comparison Result:</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Race 1</th>
+            <th>Race 2</th>
+            <th>T-Statistic</th>
+            <th>P-Value</th>
+            <th>Significance</th>
+        </tr>
+        <tr>
+            <td>{{ race_result['Race_1'] }}</td>
+            <td>{{ race_result['Race_2'] }}</td>
+            <td>{{ race_result['T-Statistic'] }}</td>
+            <td>{{ race_result['P-Value'] }}</td>
+            <td>{{ race_result['Significance'] }}</td>
+        </tr>
+    </table>
     {% endif %}
-    
-    <h2>View Area Type Results</h2>
+
+    <h1>Compare Academic Scores across Food Deserts and Non-Food Deserts</h1>
+    <h3>Visualization:</h3>
+    <img src="{{ url_for('static', filename='graphs/area_type_academic_scores.png') }}" alt="Graph 1" width="500">
+
     <form method="POST" action="/area">
         <label for="area">Select Area Type:</label>
         <select id="area" name="area" required>
@@ -52,11 +73,11 @@ html = """
 
         <br><br>
 
-        <button type="submit">Show Area Type Result</button>
+        <button type="submit">Show Academic Scores Result</button>
     </form>
 
     {% if area_result %}
-    <h3>Area Type Comparison Result:</h3>
+    <h3>Academic Scores Comparison Result:</h3>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr>
             <th>Area Type</th>
@@ -75,7 +96,9 @@ html = """
     </table>
     {% endif %}
     
-    <h2>View Food Desert Comparison Results</h2>
+    <h1>Compare Sleep Deprivation across Food Deserts and Non-Food Deserts</h1>
+    <h3>Visualization:</h3>
+    <img src="{{ url_for('static', filename='graphs/area_type_sleep_deprivation.png') }}" alt="Graph 2" width="500">
     <form method="POST" action="/food">
         <label for="area">Select Area Type:</label>
         <select id="area" name="area" required>
@@ -86,11 +109,11 @@ html = """
 
         <br><br>
 
-        <button type="submit">Show Food Desert Result</button>
+        <button type="submit">Show Sleep Deprivation Result</button>
     </form>
 
     {% if food_result %}
-    <h3>Food Desert Comparison Result:</h3>
+    <h3>Sleep Deprivation Comparison Result:</h3>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr>
             <th>Group 1</th>
@@ -184,10 +207,13 @@ def compare_races(race1, race2):
     # Read from q2.csv to get row that contains column Race_1 = race1 and column Race_2 = race2
     row = q1_df[((q1_df['Race_1'] == race1) & (q1_df['Race_2'] == race2))]
     if not row.empty:
-        t_stat = row.iloc[0]['T-Statistic']
-        p_val = row.iloc[0]['P-Value']
-        Significance = row.iloc[0]['Significance']
-        return f"T-statistic: {t_stat:.4f}, P-value: {p_val:.4f}, Statistically {Significance}"
+        return {
+            "Race_1": row.iloc[0]['Race_1'],
+            "Race_2": row.iloc[0]['Race_2'],
+            "T-Statistic": f"{row.iloc[0]['T-Statistic']:.4f}",
+            "P-Value": f"{row.iloc[0]['P-Value']:.2e}",
+            "Significance": row.iloc[0]['Significance']
+        }
     else:
         return "No precomputed t-test result found for this pair."
 
@@ -277,7 +303,7 @@ def race_compare():
         result = compare_races(race1, race2)
     else:
         result = "Please select two different race groups."
-    return render_template_string(html, races=race_labels, race_result=result)
+    return render_template_string(html, races=race_labels, areas=area_labels, race_result=result)
 
 # Area comparison route
 @app.route('/area', methods=['POST'])
@@ -286,7 +312,7 @@ def area_compare():
     result = None
     if area:
         result = get_area_result(area)
-    return render_template_string(html, areas=area_labels, area_result=result)
+    return render_template_string(html, races=race_labels, areas=area_labels, area_result=result)
 
 @app.route('/food', methods=['POST'])
 def food_compare():
@@ -294,7 +320,7 @@ def food_compare():
     result = None
     if area:
         result = get_food_desert_result(area)
-    return render_template_string(html, areas=area_labels, food_result=result)
+    return render_template_string(html, races=race_labels, areas=area_labels, food_result=result)
 
 
 @app.route('/sleep', methods=['POST'])
