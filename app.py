@@ -14,6 +14,9 @@ html = """
 </head>
 <body>
     <h1>Compare Academic Scores Between Race Groups</h1>
+    <h3>Visualization:</h3>
+    <img src="{{ url_for('static', filename='graphs/race_group_academic_scores.png') }}" alt="Graph 2" width="500">
+    
     <form method="POST" action="/race">
         <label for="race1">Select first race:</label>
         <select id="race1" name="race1" required>
@@ -57,6 +60,9 @@ html = """
     {% endif %}
 
     <h1>Compare Academic Scores across Food Deserts and Non-Food Deserts</h1>
+    <h3>Visualization:</h3>
+    <img src="{{ url_for('static', filename='graphs/area_type_academic_scores.png') }}" alt="Graph 1" width="500">
+
     <form method="POST" action="/area">
         <label for="area">Select Area Type:</label>
         <select id="area" name="area" required>
@@ -91,6 +97,8 @@ html = """
     {% endif %}
     
     <h1>Compare Sleep Deprivation across Food Deserts and Non-Food Deserts</h1>
+    <h3>Visualization:</h3>
+    <img src="{{ url_for('static', filename='graphs/area_type_sleep_deprivation.png') }}" alt="Graph 2" width="500">
     <form method="POST" action="/food">
         <label for="area">Select Area Type:</label>
         <select id="area" name="area" required>
