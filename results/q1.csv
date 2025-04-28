@@ -1,0 +1,21 @@
+Race_1,Race_2,T-Statistic,P-Value,Significance
+White,Asian,-41.321,0.0000e+00,Significant
+White,Black,364.736,0.0000e+00,Significant
+White,Hispanic,299.276,0.0000e+00,Significant
+White,Native American,244.930,0.0000e+00,Significant
+Asian,White,-41.321,0.0000e+00,Significant
+Asian,Black,364.126,0.0000e+00,Significant
+Asian,Hispanic,305.830,0.0000e+00,Significant
+Asian,Native American,259.130,0.0000e+00,Significant
+Hispanic,Asian,305.830,0.0000e+00,Significant
+Hispanic,Black,73.368,0.0000e+00,Significant
+Hispanic,Native American,-31.568,3.4019e-218,Significant
+Hispanic,White,299.276,0.0000e+00,Significant
+Black,Asian,364.126,0.0000e+00,Significant
+Black,Hispanic,73.368,0.0000e+00,Significant
+Black,Native American,-98.411,0.0000e+00,Significant
+Black,White,364.736,0.0000e+00,Significant
+Native American,Asian,259.130,0.0000e+00,Significant
+Native American,White,244.930,0.0000e+00,Significant
+Native American,Hispanic,-31.568,3.4019e-218,Significant
+Native American,Black,-98.411,0.0000e+00,Significant
