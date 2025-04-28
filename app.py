@@ -59,14 +59,17 @@ html = """
 
 # The function to compute t-test
 def compare_races(race1, race2):
+    print("PRESSED")
     # read from q2.csv to get row that contains column Race_1 = race1 and column Race_2 = race2
-    ttest_df = pd.read_csv("data/q1.csv")
+    ttest_df = pd.read_csv("results/q1.csv")
 
     row = ttest_df[((ttest_df['Race_1'] == race1) & (ttest_df['Race_2'] == race2))]
     if not row.empty:
         t_stat = row.iloc[0]['T-Statistic']
         p_val = row.iloc[0]['P-Value']
-        return f"T-statistic: {t_stat:.4f}, P-value: {p_val:.4f}"
+        Significance = row.iloc[0]['Significance']
+
+        return f"T-statistic: {t_stat:.4f}, P-value: {p_val:.4f}, Statistically {Significance}"
     else:
         return "No precomputed t-test result found for this pair."
 
