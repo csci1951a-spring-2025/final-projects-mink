@@ -1,0 +1,21 @@
+Sleep_Deprivation_Level,Group_1,Group_2,T-Statistic,P-Value,Significance
+High,White,Asian,-36.306,1.0324e-286,Significant
+High,White,Black,239.147,0.0000e+00,Significant
+High,White,Hispanic,194.038,0.0000e+00,Significant
+High,White,Native American,158.128,0.0000e+00,Significant
+High,Asian,Black,253.055,0.0000e+00,Significant
+High,Asian,Hispanic,212.198,0.0000e+00,Significant
+High,Asian,Native American,179.544,0.0000e+00,Significant
+High,Hispanic,Black,51.211,0.0000e+00,Significant
+High,Hispanic,Native American,-23.701,7.7218e-124,Significant
+High,Black,Native American,-70.910,0.0000e+00,Significant
+Low,White,Asian,-22.686,1.1605e-113,Significant
+Low,White,Black,276.960,0.0000e+00,Significant
+Low,White,Hispanic,229.291,0.0000e+00,Significant
+Low,White,Native American,187.958,0.0000e+00,Significant
+Low,Asian,Black,261.920,0.0000e+00,Significant
+Low,Asian,Hispanic,220.333,0.0000e+00,Significant
+Low,Asian,Native American,186.981,0.0000e+00,Significant
+Low,Hispanic,Black,52.539,0.0000e+00,Significant
+Low,Hispanic,Native American,-21.038,4.6414e-98,Significant
+Low,Black,Native American,-68.372,0.0000e+00,Significant
