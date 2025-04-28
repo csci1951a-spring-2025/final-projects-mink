@@ -109,6 +109,61 @@ html = """
     </table>
     {% endif %}
 
+    
+    <h1>Compare Academic Scores Between Race Groups Depending on Sleep Deprivation</h1>
+    <form method="POST" action="/sleep">
+        <label for="sleepRace1">Select first race:</label>
+        <select id="sleepRace1" name="sleepRace1" required>
+            {% for race in races %}
+            <option value="{{ race }}">{{ race }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label for="sleepRace2">Select second race:</label>
+        <select id="sleepRace2" name="sleepRace2" required>
+            {% for race in races %}
+            <option value="{{ race }}">{{ race }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+    <label for="sleep_status">Select Sleep Deprivation Level:</label>
+    <select id="sleep_status" name="sleep_status" required>
+        <option value="High">High</option>
+        <option value="Low">Low</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit">Compare Sleep Deprivation</button>
+    </form>
+
+    {% if sleep_result %}
+    <h3>Sleep Deprivation Comparison Result:</h3>
+    <p> Error: {{ sleep_result['Error'] }} </p>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Race 1</th>
+            <th>Race 2</th>
+            <th>Sleep Deprivation Level</th>
+            <th>T-Statistic</th>
+            <th>P-Value</th>
+            <th>Significance</th>
+        </tr>
+        <tr>
+            <td>{{ sleep_result['Race_1'] }}</td>
+            <td>{{ sleep_result['Race_2'] }}</td>
+            <td>{{ sleep_result['Sleep_Deprivation_Level'] }}</td>
+            <td>{{ sleep_result['T-Statistic'] }}</td>
+            <td>{{ sleep_result['P-Value'] }}</td>
+            <td>{{ sleep_result['Significance'] }}</td>
+        </tr>
+    </table>
+    {% endif %}
+
 </body>
 </html>
 """
@@ -170,6 +225,43 @@ def get_food_desert_result(group):
     else:
         return None
 
+def get_sleep_result(race1, race2, sleep_status):
+    print("BEFORE FUnc")
+    sleep_df = pd.read_csv("results/q4.csv")
+    row = sleep_df[
+        (sleep_df['Sleep_Deprivation_Level'] == sleep_status) &
+        (sleep_df['Race_1'] == race1) &
+        (sleep_df['Race_2'] == race2) 
+    ]
+    row_opposite = sleep_df[
+        (sleep_df['Sleep_Deprivation_Level'] == sleep_status) &
+        (sleep_df['Race_1'] == race2) &
+        (sleep_df['Race_2'] == race1) 
+    ]
+    if not row.empty:
+        print("Row found")
+        return {
+            "Race_1": race1,
+            "Race_2": race2,
+            "Sleep_Deprivation_Level": sleep_status,
+            "T-Statistic": f"{row.iloc[0]['T-Statistic']:.4f}",
+            "P-Value": f"{row.iloc[0]['P-Value']:.4f}",
+            "Significance": row.iloc[0]['Significance']
+        }
+    if not row_opposite.empty:
+         print("OTHER ROW FOUND")
+         return {
+            "Race_1": race1,
+            "Race_2": race2,
+            "Sleep_Deprivation_Level": sleep_status,
+            "T-Statistic": f"{row_opposite.iloc[0]['T-Statistic']:.4f}",
+            "P-Value": f"{row_opposite.iloc[0]['P-Value']:.4f}",
+            "Significance": row_opposite.iloc[0]['Significance']
+        }
+    else:
+        print("EROR ")
+        return {'Error': "No precomputed sleep deprivation result found for this combination."}
+
 # Home route
 @app.route('/', methods=['GET'])
 def home():
@@ -203,6 +295,26 @@ def food_compare():
     if area:
         result = get_food_desert_result(area)
     return render_template_string(html, areas=area_labels, food_result=result)
+
+
+@app.route('/sleep', methods=['POST'])
+def sleep_depr_compare():
+    race1 = request.form.get('sleepRace1')
+    race2 = request.form.get('sleepRace2')
+    sleep_status = request.form.get('sleep_status')
+    result = None
+    if race1 and race2 and sleep_status and race1 != race2:
+        result = get_sleep_result(race1, race2, sleep_status)
+        print(result)
+    else:
+        result = "Please select two different races and a sleep deprivation status."
+    return render_template_string(
+        html,
+        areas=area_labels, 
+        races=race_labels,
+        # food_result=result,
+        sleep_result=result,
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

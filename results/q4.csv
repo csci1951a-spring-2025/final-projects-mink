@@ -1,4 +1,4 @@
-Sleep_Deprivation_Level,Group_1,Group_2,T-Statistic,P-Value,Significance
+Sleep_Deprivation_Level,Race_1,Race_2,T-Statistic,P-Value,Significance
 High,White,Asian,-36.306,1.0324e-286,Significant
 High,White,Black,239.147,0.0000e+00,Significant
 High,White,Hispanic,194.038,0.0000e+00,Significant
