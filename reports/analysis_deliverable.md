@@ -146,7 +146,7 @@ Yes, the data was adequeate for our analysis. The sample size is quite large wit
 
 # ML Component
 
-For our ML tasks we trained two models: 1) XGBoost classifier and 2) K-Means clustering. For both of our models, we used the pairwise combinations of the `Urban` and `LATracts_half` binary categorical columns. After dropping rows with `nan` values in the relevant feature columns we were left with 3 distinct classes in our dataset: `11` (urban and food desert), `10` (urban and not food desert), and `00` (not urban and not food desert). There were no `01` class data points after filtering out rows with `nan` values. The resulting dataset has a significant imbalance:
+For our ML tasks we trained two models: 1) XGBoost classifier and 2) K-Nearest Neighbors clustering. For both of our models, we used the pairwise combinations of the `Urban` and `LATracts_half` binary categorical columns. After dropping rows with `nan` values in the relevant feature columns we were left with 3 distinct classes in our dataset: `11` (urban and food desert), `10` (urban and not food desert), and `00` (not urban and not food desert). There were no `01` class data points after filtering out rows with `nan` values. The resulting dataset has a significant imbalance:
 
 | y   | count |
 | -   | -     |
