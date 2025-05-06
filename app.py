@@ -11,6 +11,35 @@ html = """
 <html>
 <head>
     <title>Race Comparison T-Test</title>
+    <style>
+    button {
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.2);
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+
+    select {
+        padding: 6px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+</style>
+
 </head>
 <body>
     <h1>Compare Academic Scores Between Race Groups</h1>
@@ -21,7 +50,7 @@ html = """
         <label for="race1">Select first race:</label>
         <select id="race1" name="race1" required>
             {% for race in races %}
-            <option value="{{ race }}">{{ race }}</option>
+    <option value="{{ race }}" {% if race == selected_race1 %}selected{% endif %}>{{ race }}</option>
             {% endfor %}
         </select>
 
@@ -30,7 +59,7 @@ html = """
         <label for="race2">Select second race:</label>
         <select id="race2" name="race2" required>
             {% for race in races %}
-            <option value="{{ race }}">{{ race }}</option>
+    <option value="{{ race }}" {% if race == selected_race2 %}selected{% endif %}>{{ race }}</option>
             {% endfor %}
         </select>
 
@@ -67,7 +96,7 @@ html = """
         <label for="area">Select Area Type:</label>
         <select id="area" name="area" required>
             {% for area in areas %}
-            <option value="{{ area }}">{{ area }}</option>
+    <option value="{{ area }}" {% if area == selected_area %}selected{% endif %}>{{ area }}</option>
             {% endfor %}
         </select>
 
@@ -103,7 +132,7 @@ html = """
         <label for="area">Select Area Type:</label>
         <select id="area" name="area" required>
             {% for area in areas %}
-            <option value="{{ area }}">{{ area }}</option>
+    <option value="{{ area }}" {% if area == selected_food_area %}selected{% endif %}>{{ area }}</option>
             {% endfor %}
         </select>
 
@@ -138,7 +167,7 @@ html = """
         <label for="sleepRace1">Select first race:</label>
         <select id="sleepRace1" name="sleepRace1" required>
             {% for race in races %}
-            <option value="{{ race }}">{{ race }}</option>
+    <option value="{{ race }}" {% if race == selected_sleepRace1 %}selected{% endif %}>{{ race }}</option>
             {% endfor %}
         </select>
 
@@ -147,7 +176,7 @@ html = """
         <label for="sleepRace2">Select second race:</label>
         <select id="sleepRace2" name="sleepRace2" required>
             {% for race in races %}
-            <option value="{{ race }}">{{ race }}</option>
+    <option value="{{ race }}" {% if race == selected_sleepRace2 %}selected{% endif %}>{{ race }}</option>
             {% endfor %}
         </select>
 
@@ -155,8 +184,8 @@ html = """
 
     <label for="sleep_status">Select Sleep Deprivation Level:</label>
     <select id="sleep_status" name="sleep_status" required>
-        <option value="High">High</option>
-        <option value="Low">Low</option>
+    <option value="High" {% if selected_sleep_status == "High" %}selected{% endif %}>High</option>
+    <option value="Low" {% if selected_sleep_status == "Low" %}selected{% endif %}>Low</option>
     </select>
 
     <br><br>
@@ -166,7 +195,6 @@ html = """
 
     {% if sleep_result %}
     <h3>Sleep Deprivation Comparison Result:</h3>
-    <p> Error: {{ sleep_result['Error'] }} </p>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr>
             <th>Race 1</th>
@@ -252,7 +280,6 @@ def get_food_desert_result(group):
         return None
 
 def get_sleep_result(race1, race2, sleep_status):
-    print("BEFORE FUnc")
     sleep_df = pd.read_csv("results/q4.csv")
     row = sleep_df[
         (sleep_df['Sleep_Deprivation_Level'] == sleep_status) &
@@ -265,7 +292,6 @@ def get_sleep_result(race1, race2, sleep_status):
         (sleep_df['Race_2'] == race1) 
     ]
     if not row.empty:
-        print("Row found")
         return {
             "Race_1": race1,
             "Race_2": race2,
@@ -275,17 +301,16 @@ def get_sleep_result(race1, race2, sleep_status):
             "Significance": row.iloc[0]['Significance']
         }
     if not row_opposite.empty:
-         print("OTHER ROW FOUND")
-         return {
+        t_stat_flipped = -1 * row_opposite.iloc[0]['T-Statistic']
+        return {
             "Race_1": race1,
             "Race_2": race2,
             "Sleep_Deprivation_Level": sleep_status,
-            "T-Statistic": f"{row_opposite.iloc[0]['T-Statistic']:.4f}",
+            "T-Statistic": f"{t_stat_flipped:.4f}",
             "P-Value": f"{row_opposite.iloc[0]['P-Value']:.4f}",
             "Significance": row_opposite.iloc[0]['Significance']
         }
     else:
-        print("EROR ")
         return {'Error': "No precomputed sleep deprivation result found for this combination."}
 
 # Home route
@@ -303,7 +328,7 @@ def race_compare():
         result = compare_races(race1, race2)
     else:
         result = "Please select two different race groups."
-    return render_template_string(html, races=race_labels, areas=area_labels, race_result=result)
+    return render_template_string(html, races=race_labels, areas=area_labels, race_result=result, selected_rac1e = race1, selected_race2 = race2)
 
 # Area comparison route
 @app.route('/area', methods=['POST'])
@@ -312,7 +337,7 @@ def area_compare():
     result = None
     if area:
         result = get_area_result(area)
-    return render_template_string(html, races=race_labels, areas=area_labels, area_result=result)
+    return render_template_string(html, races=race_labels, areas=area_labels, area_result=result, selected_area=area)
 
 @app.route('/food', methods=['POST'])
 def food_compare():
@@ -320,7 +345,7 @@ def food_compare():
     result = None
     if area:
         result = get_food_desert_result(area)
-    return render_template_string(html, races=race_labels, areas=area_labels, food_result=result)
+    return render_template_string(html, races=race_labels, areas=area_labels, food_result=result, selected_food_area=area)
 
 
 @app.route('/sleep', methods=['POST'])
@@ -331,7 +356,6 @@ def sleep_depr_compare():
     result = None
     if race1 and race2 and sleep_status and race1 != race2:
         result = get_sleep_result(race1, race2, sleep_status)
-        print(result)
     else:
         result = "Please select two different races and a sleep deprivation status."
     return render_template_string(
@@ -340,6 +364,9 @@ def sleep_depr_compare():
         races=race_labels,
         # food_result=result,
         sleep_result=result,
+        selected_sleepRace1=race1,
+        selected_sleepRace2=race2,
+        selected_sleep_status=sleep_status
     )
 
 if __name__ == "__main__":
