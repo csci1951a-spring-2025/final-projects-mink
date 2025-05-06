@@ -198,7 +198,7 @@ As we can see, the model scores approximately 8.4% higher than the already high 
 
 As XGBoost provides access to its feature weights, we also investigated which features were most important in the trained model.
 
-![Math XGBoost Important Features](../graphs/math_xgboost_features.png)
+![Math XGBoost Important Features](../analysis_deliverable/visualizations/math_xgboost_features.png)
 
 As we can see in the graph, XGBoost places a significant amount of importance in the health features. The top academic dataset features were `gcs_mn_wag` (average score gap between white and asian students) and `tot_asmt_asn` (number of observed asian students) followed by total counts of observed black students and the white-native-american student gap. Overall, gap metrics and counts of samples per race seemed to be the most important academic dataset features.
 
@@ -226,7 +226,7 @@ The dataset's baseline accuracy is 83.31%. Below is the table of all result metr
 
 Again, we can see that the model scores approximately 8.4% higher than the already high baseline accuracy. This performance extends to the minority classes as can be seen by the 83.66% balanced accuracy on the test set. This is also supported by the >0.93 precision, recall, and f1 scores.
 
-![RLA XGBoost Important Features](../graphs/rla_xgboost_features.png)
+![RLA XGBoost Important Features](../analysis_deliverable/visualizations/rla_xgboost_features.png)
 
 Similarly to the math dataset, XGBoost places a significant amount of importance in the health features. The top academic dataset features were `gcs_mn_wag` (average score gap between white and asian students) and `gcs_mn_whg` (same for white hispanic students) followed by total counts of observed asian and black students. Again, gap metrics and counts of samples per race seemed to be the most important academic dataset features.
 
