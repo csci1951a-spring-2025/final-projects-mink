@@ -15,7 +15,9 @@ We used grouped bar charts across all three visualizations because they offer a 
 * Scatter plots with overlays could explore correlations, such as between sleep deprivation and academic performance.
 
 **Were there any challenges visualizing the results, if so, what were they?**
-TODO
+Visualizing the results was relatively straight forward, especially after having our data already cleaned
+and grouping the counties into rural food deserts, urban food deserts, and non-food deserts. The only
+additional think we included to better the visualizations that was a bit tricky was the specifically colored labelling of these groups that would make the most sense for the context, as well as adding data labels for clearer visuals.
 
 **Will your visualization require text to provide context or is it standalone?**
 These visualizations benefit from minimal but essential textual context. Labels like sample sizes (`n`) and averages (`avg`) embedded in the charts themselves help ground the data. However, some additional explanatory text is necessary to guide interpretation—especially regarding what "academic performance" or "sleep deprivation prevalence" represent and how to understand disparities across groups.
